@@ -1,5 +1,6 @@
 trigger AccountTrigger on Account (after insert,after update) {
-    
+    // Added a comment
+	
     System.debug('0');
     
     if (trigger.isInsert){
