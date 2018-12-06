@@ -1,0 +1,17 @@
+{
+    "projectName": "MyDevRepo",
+    "username": "masoud.azampour@gmail.com.dev",
+    "id": "e02dbb40-f930-11e8-b22f-09d4af74fbd7",
+    "namespace": "",
+    "environment": "developer",
+    "loginUrl": "https://login.salesforce.com/",
+    "workspace": "C:\\Masoud_ws_MavensMate",
+    "subscription": [
+        "ApexClass",
+        "ApexComponent",
+        "ApexPage",
+        "ApexTrigger",
+        "StaticResource",
+        "AuraDefinitionBundle"
+    ]
+}

@@ -1,0 +1,271 @@
+<apex:page controller="MetaDescriberController" showHeader="false" standardStylesheets="false" sidebar="false" applyHtmlTag="false" applyBodyTag="false" docType="html-5.0">
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" lang="en">
+    <head>
+          <meta charset="utf-8" />
+          <meta http-equiv="x-ua-compatible" content="ie=edge" />
+          <title>Search Products</title>
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+        
+          <!-- Import the Design System style sheet -->
+          <apex:slds />
+          
+        </head>
+
+    
+    <body>
+          <!-- REQUIRED SLDS WRAPPER -->
+          <div class="slds-scope">
+        
+            <!-- MASTHEAD -->
+            <p class="slds-text-heading--label slds-m-bottom--small">
+              Demo voice API 
+            </p>
+            <!-- / MASTHEAD -->
+        
+            <!-- PAGE HEADER -->
+            <div class="slds-page-header">
+            
+              <!-- LAYOUT GRID -->
+              <div class="slds-grid">
+            
+                <!-- GRID COL -->
+                <div class="slds-col slds-has-flexi-truncate">
+                  <!-- HEADING AREA -->
+                    <!-- MEDIA OBJECT = FIGURE + BODY -->
+                    <div class="slds-media slds-no-space slds-grow">
+                      <div class="slds-media__figure">
+                        <svg aria-hidden="true" class="slds-icon slds-icon-standard-contact">
+                          <use xlink:href="{!URLFOR($Asset.SLDS, 'assets/icons/standard-sprite/svg/symbols.svg#product')}"></use>
+                        </svg>
+                      </div>
+                      <div class="slds-media__body">
+                        
+                        <h1 class="slds-page-header__title slds-m-right--small slds-align-middle slds-truncate" title="Search Products">Search Products</h1>
+                      </div>
+                    </div>
+                    <!-- / MEDIA OBJECT -->
+                  <!-- / HEADING AREA -->
+                </div>
+            
+            
+              </div>
+              <!-- / LAYOUT GRID -->
+            
+              <!-- PAGE HEADER DETAIL ROW -->
+                <!-- 
+                <ul class="slds-grid slds-page-header__detail-row">
+                  <li class="slds-page-header__detail-block">
+                  	 
+                  </li>
+                </ul> 
+                -->
+                <div class="slds-grid slds-page-header__detail-row">
+					<div class="slds-form-element">
+					  <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon_right">
+					    <svg class="slds-icon slds-input__icon slds-input__icon_right slds-icon-text-default" aria-hidden="true">
+					      <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#search" />
+					    </svg>
+					    <input type="text" id="txtProdName" class="slds-input" placeholder="Talk or type and hit enter..." />
+					    <button id="start_button" onclick="startButton(event)" style="display: inline-block;">
+					    	<img alt="Start Mic" id="start_img" src="/intl/en/chrome/assets/common/images/content/mic.gif"/>
+					    </button>
+					  </div>
+					</div>
+               </div>
+              <!-- / PAGE HEADER DETAIL ROW -->
+            
+            </div>
+            <!-- / PAGE HEADER -->
+        
+            <!-- PRIMARY CONTENT WRAPPER -->
+            <div class="myapp slds-p-horizontal--medium">
+              <ul id="product-list" class="slds-has-dividers--bottom-space"></ul>
+            </div>
+            <!-- / PRIMARY CONTENT WRAPPER -->
+        
+            <!-- FOOTER -->
+            <!-- FOOTER -->
+            <footer role="contentinfo" class="slds-p-around--large">
+              <!-- LAYOUT GRID -->
+              <div class="slds-grid slds-grid--align-spread">
+                <p class="slds-col">Salesforce Lightning</p>
+                <p class="slds-col">&copy; Masoud Azampour</p>
+              </div>
+              <!-- / LAYOUT GRID -->
+            </footer>
+            <!-- / FOOTER -->
+            <!-- / FOOTER -->
+        
+          </div>
+          <!-- / REQUIRED SLDS WRAPPER -->    
+        
+          <!-- JAVASCRIPT -->
+            <script type="text/javascript">
+            
+              /*
+              (function() {
+                var contact = new SObjectModel.Contact();
+                var contactList = document.getElementById('contact-list');
+            
+                function createTile (record) {
+                  return [
+                    '<li class="slds-item">',
+                      '<div class="slds-tile slds-media">',
+                        '<div class="slds-media__figure">',
+                          '<img class="slds-avatar slds-avatar--medium" src="', record.get('PhotoUrl'), '" alt="" />',
+                        '</div>',
+                        '<div class="slds-media__body">',
+                          '<h3 class="slds-truncate" title="', record.get('Name'), '"><a href="javascript:void(0);">', record.get('Name') ,'</a></h3>',
+                          '<div class="slds-tile__detail slds-text-body--small">',
+                            '<p class="slds-truncate">', record.get('Title') ,'</p>',
+                          '</div>',
+                        '</div>',
+                      '</div>',
+                    '</li>'
+                  ].join('');
+                }
+                            
+                contact.retrieve(
+                  { orderby: [{ LastModifiedDate: 'DESC' }], limit: 10 },
+                  function(error, records) {
+                    if (error) {
+                      alert(error.message);
+                    } else {
+                      contactList.innerHTML = records.map(createTile).join('');
+                    }
+                  }
+                );
+              })();
+              */
+              
+
+              //https://github.com/googlearchive/webplatform-samples/blob/master/webspeechdemo/webspeechdemo.html
+              
+              
+              
+              Visualforce.remoting.timeout = 120000; // Set timeout at page level
+              
+              
+              function getProducts(prodName) {
+		        // This remoting call will use the page's timeout value
+		        Visualforce.remoting.Manager.invokeAction(
+		            '{!$RemoteAction.MetaDescriberController.setProductListByName}',
+		            prodName, 
+		            function(result, event){
+		            	
+		            	if (event.status) {
+		            		
+							if (result !=null && result.length > 0) {
+								for (var i=0; i<result.length; i++) {
+									console.log(result[i]);
+								}
+							} else {
+								console.log("no product found");
+							}
+							
+										            		
+		            		//alert('success');
+		            		
+		            	} else if (event.type === 'exception') {
+		            		alert('Error: ' + event.message + ' @' +  event.where);
+		            		
+		            	} else {
+		            		alert(event.message);
+		            		
+		            	}
+		            }
+
+		        );              	
+              }
+              
+              var txtProdName = document.getElementById("txtProdName");
+              
+              
+              txtProdName.onkeyup = function(e) {
+              	if(e.keyCode == 13){
+       				if (txtProdName.value !=='') {
+       					getProducts(txtProdName.value);
+       				}
+    			}
+              }
+             
+             
+             var recognition = null;
+             
+             var create_email = false;
+			 var final_transcript = '';
+			 var recognizing = false;
+			 var ignore_onend;
+			 var start_timestamp;
+              
+		     if (!('webkitSpeechRecognition' in window)) {
+			  	alert('This browser or the current version does not support voice recognition');
+			 } else {			
+			 	recognition = new webkitSpeechRecognition();    
+			    recognition.continuous = false;
+  				recognition.interimResults = false;      
+  				recognition.lang = "en-US";   
+  				
+				recognition.onstart = function() {
+					recognizing = true;				 
+				};  	
+				
+				recognition.onresult = function(event) {
+				    final_transcript = '';
+					var interim_transcript = '';
+					for (var i = event.resultIndex; i < event.results.length; ++i) {
+					  //console.log(event.results[i][0].transcript);	
+				      if (event.results[i].isFinal) {				      	
+				        final_transcript += event.results[i][0].transcript;
+				      } else {
+				      	interim_transcript += event.results[i][0].transcript;	
+				      }			
+					}
+					
+					console.log('-----final_transcript ' + final_transcript);
+					
+					document.getElementById('txtProdName').value = final_transcript;
+					if (final_transcript !=null) {
+						//getProducts(final_transcript);
+					}
+					
+					//console.log('interim_transcript ' + interim_transcript);
+				};
+				
+				recognition.onend = function() {
+					recognizing = false;
+					//console.log(final_transcript);
+					console.log('***final_transcript ' + final_transcript);
+				};			  
+			 }       
+			 
+			 function startButton(event) {
+
+			 	if (recognition !== null) {
+			 		if (recognizing ) {
+			 			console.log('recognizing');
+			 			recognizing = false;
+			 			recognition.stop();
+			 			console.log('Stopped recognizing...');		 			
+			 		} else {
+			 			console.log('NOT recognizing');
+			 			recognizing = true;
+			 			recognition.start();
+			 			console.log('Started recognizing...');
+			 		}
+			 	}
+			 }
+			 
+
+			 
+			        
+            
+            </script>
+          <!-- / JAVASCRIPT --> 
+    </body>
+    
+    
+    </html>
+
+    
+</apex:page>

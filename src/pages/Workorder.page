@@ -1,0 +1,96 @@
+<apex:page showHeader="false" sidebar="false" controller="WorkorderController">
+      <apex:slds /> 	
+      
+    
+    <style>
+    	.bPageBlock {
+    		border-top: 2px solid rgb(29, 150, 122) !important;
+    	}
+    	.txtBox {
+				-webkit-border-radius: 5px;
+			    -moz-border-radius: 5px;
+			    border-radius: 5px;
+			    border-width: 1px !important;
+			    border-style: ;
+			    /* border-color: red; */
+			    /* border-top: red; */
+			    border-style: solid;
+			    border-color: #fdfdfd;
+			    box-shadow: 0 0 3px #999; 
+			    padding: 5px;  
+			    margin-right: 5px; 	
+			    margin-right: 5px !important;
+    	}
+    	
+    	.textArea2 {
+    		margin-top: 10px !important;
+    		margin-bottom: 10px !important;
+    	}
+    
+    </style>
+    
+    <div id="main" class="slds-panel__section">
+    <apex:form >
+	    
+    	<apex:pageBlock title="Workorder: {!IF(theWorkOrder.Id !=null, theWorkOrder.WorkOrderNumber, 'NEW')}">
+    	    <apex:outputPanel id="msgPanel">    	    
+    	    	<apex:pageMessages />
+    	    </apex:outputPanel>
+            
+            
+    
+                
+    		<apex:pageBlockSection columns="2">
+    			<apex:inputField value="{!theWorkOrder.AccountId}" styleClass="txtBox" />     
+    			<apex:inputField value="{!theWorkOrder.ContactId}" styleClass="txtBox" />
+    			<apex:inputField value="{!theWorkOrder.Subject}" styleClass="txtBox" />
+    			<apex:inputField value="{!theWorkOrder.Description}" styleClass="txtBox" />   
+    			
+
+    		</apex:pageBlockSection>
+    	</apex:pageBlock>
+
+    	<apex:pageBlock id="itemList" title="Work Order Line Items" rendered="{!canAddWoLines}">
+    	 
+    		 
+ 
+    			
+    		 
+
+			<apex:variable var="rowNumber" value="{!0}"/>
+    		<apex:pageBlockTable value="{!workOrderLineItemList}" var="item">
+
+				<apex:column headerValue="Work order line code">
+					<apex:inputField value="{!item.WO_Code__c}" styleClass="txtBox"/>
+				</apex:column>
+				
+				<apex:column headerValue="Subject">
+					<apex:inputField value="{!item.Subject}" styleClass="txtBox"/>
+				</apex:column>
+
+				<apex:column headerValue="Description">
+					<apex:inputField value="{!item.Description}" styleClass="txtBox textArea2"/>
+				</apex:column>
+
+				<apex:column headerValue="Action">
+					<apex:commandLink value="Delete" action="{!deleteRow}" reRender="itemList,msgPanel" immediate="true">
+						<apex:param name="rowIndex" value="{!rowNumber}"/>
+						<apex:param name="woLineId" value="{!item.Id}" />
+					</apex:commandLink>
+					<apex:variable var="rowNumber" value="{!rowNumber+1}"/>
+				</apex:column>
+
+
+
+    		</apex:pageBlockTable>
+
+    	</apex:pageBlock>
+
+    	    			<apex:commandButton action="{!addNewWorkLineItemRow}" value="Add Work LineItem Row" styleClass="btn slds-button slds-button_neutral slds-grow"/>  
+    	<apex:commandButton action="{!save}" value="Save All" styleClass="btn slds-button slds-button_neutral slds-grow"/>
+	
+    </apex:form>
+    </div>
+
+
+</apex:page>

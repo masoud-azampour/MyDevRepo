@@ -1,0 +1,31 @@
+<apex:page showHeader="true" sidebar="true"  controller="ContactForm_Controller">
+
+	<style type="text/css">
+		body .bodyDiv .outer .oRight {
+    		background-color: #FFF; /*to remove the unnecessary extra blue line at top*/
+		}
+
+	</style>
+
+	<apex:pageMessages ></apex:pageMessages>
+
+	<apex:outputPanel rendered="{!renderPage}">
+		<apex:form >
+			<apex:pageBlock title="Update your hobbies" mode="Edit" tabStyle="Contact">
+				
+				    <apex:pageBlockSection columns="2">
+		                <apex:outputField value="{!theContact.FirstName}"/>
+		                <apex:outputField value="{!theContact.LastName}"/>
+		                <apex:inputTextArea value="{!theContact.My_Hobbies__c}" rows="5" cols="100" />
+		            </apex:pageBlockSection>
+		 
+
+		             <apex:pageBlockButtons location="bottom">
+						<apex:commandButton action="{!Save}" value="Update"/>
+		            </apex:pageBlockButtons>
+	   
+			</apex:pageBlock>
+		</apex:form>
+	</apex:outputPanel>
+
+</apex:page>

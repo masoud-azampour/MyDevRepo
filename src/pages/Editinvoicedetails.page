@@ -1,0 +1,104 @@
+<apex:page showHeader="false" sidebar="false" controller="InvoiceDetailController">
+    
+    <apex:slds />
+
+    <style>
+    	.bPageBlock {
+    		border-top: 2px solid rgb(29, 150, 122) !important;
+    	}
+    	.txtBox {
+				-webkit-border-radius: 5px;
+			    -moz-border-radius: 5px;
+			    border-radius: 5px;
+			    border-width: 1px !important;
+			    border-style: ;
+			    /* border-color: red; */
+			    /* border-top: red; */
+			    border-style: solid;
+			    border-color: #fdfdfd;
+			    box-shadow: 0 0 3px #999; 
+			    padding: 5px;  
+			    margin-right: 5px; 	
+			    margin-right: 5px !important;
+    	}
+    	
+    	.textArea2 {
+    		margin-top: 10px !important;
+    		margin-bottom: 10px !important;
+    	}
+    
+    </style>  
+
+    <div id="main" class="slds-panel__section">
+    	<apex:form id="frmMain" >
+    		<apex:pageBlock title="Invoice: {!theInvoice.Name}">
+	    	    <apex:outputPanel id="msgPanel">    	    
+	    	    	<apex:pageMessages />
+	    	    </apex:outputPanel>
+
+	    		<apex:pageBlockSection columns="2">
+	    			<apex:outputField value="{!theInvoice.Account__r.Name}"  />     
+	    			<apex:outputField value="{!theInvoice.Transaction_Date__c}"   />
+	    			<apex:outputField value="{!theInvoice.PO_Number__c}"   />
+	    			<apex:outputField value="{!theInvoice.Total__c}"  />   
+	    		</apex:pageBlockSection>
+
+	    	</apex:pageBlock>
+
+	    	<apex:pageBlock id="itemList" title="Invoice Line Items" rendered="{!showInvLines}">
+	    		<apex:variable var="rowNumber" value="{!0}"/>
+
+	    		<apex:pageBlockTable value="{!invoiceLineItemList}" var="item">
+	    	 
+					<apex:column headerValue="Type">
+						<apex:inputField value="{!item.Type__c}" styleClass="txtBox"/>
+					</apex:column>
+
+					<apex:column headerValue="Product">
+						<apex:inputField value="{!item.Product__c}" styleClass="txtBox"/>
+					</apex:column>
+					
+					<apex:column headerValue="Sales Price">
+						<apex:inputField value="{!item.Sales_Price__c}" styleClass="txtBox" />
+					</apex:column>
+
+					<apex:column headerValue="Quantity">
+						<apex:inputField value="{!item.Quantity__c}" styleClass="txtBox" />
+					</apex:column>
+
+					<apex:column headerValue="Notes">
+						<apex:inputField value="{!item.Notes__c}" styleClass="txtBox textArea2"/>
+					</apex:column>
+
+					<apex:column headerValue="Line Total">
+						<div id="line_toal_{!item.Id}">
+							<apex:inputField value="{!item.Total__c}" />
+						</div>
+					</apex:column>
+
+
+					<apex:column headerValue="Action">
+						<apex:commandLink value="Delete" action="{!deleteRow}" reRender="itemList,msgPanel,frmMain" immediate="true">
+							<apex:param name="rowIndex" value="{!rowNumber}"/>
+							<apex:param name="lineItemId" value="{!item.Id}" />
+						</apex:commandLink>
+						<apex:variable var="rowNumber" value="{!rowNumber+1}"/>
+					</apex:column>
+
+	    		</apex:pageBlockTable>
+
+	    	</apex:pageBlock>
+
+
+	    	<apex:outputPanel rendered="{!showInvLines}">
+
+	    		<apex:commandButton action="{!addLineItemRow}" value="Add New Invoice Line Row" styleClass="btn slds-button slds-button_neutral slds-grow" reRender="itemList,msgPanel,frmMain"/>
+
+	    		<apex:commandButton action="{!save}" value="Save All" styleClass="btn slds-button slds-button_neutral slds-grow" reRender="itemList,msgPanel,frmMain" />
+
+				<apex:commandButton action="{!cancel}" value="Cancel" styleClass="btn slds-button slds-button_neutral slds-grow" immediate="true" />
+    		</apex:outputPanel>
+    	</apex:form> 
+
+    </div>  
+</apex:page>

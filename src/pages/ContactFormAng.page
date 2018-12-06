@@ -1,0 +1,111 @@
+<apex:page showHeader="false"   sidebar="false" docType="html-5.0" controller="ContactForm_Controller">
+    
+	<apex:pageMessages ></apex:pageMessages>
+
+    <meta charset="utf-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="{!URLFOR($Resource.WebTools, 'WebTools/bootstrap.min.css')}"/>
+	
+	<apex:includeScript value="{!URLFOR($Resource.WebTools, 'WebTools/angular.min.js')}"/>
+
+	<script type="text/javascript">
+		var App = angular.module('myApp', []);
+	    
+	    App.controller('myctrl', function ($scope) {   
+	     
+	        $scope.contact = {!contactJson};
+	        $scope.save = function(){
+      			saveMethod(JSON.stringify($scope.contact));
+  			}
+	       
+	    });
+	</script>
+
+	<style type="text/css">
+		.mainDiv {
+			width: 95%;
+			margin: 0 auto;
+			margin-top: 20px;
+	    }
+
+	    .row {
+	    	padding: 5px;
+	    	border: 1px solid black;
+	    }
+
+	    .col-md-3 {
+
+	    }
+
+	    .hobbies {
+	    	width: 95%;
+	    }
+
+	    .divBtn {
+	    	width: 100px; 
+	    	margin: 0 auto;
+	    }
+
+	    .titleDiv {
+	    	background-color: #36a0fe;
+	    }
+
+	    .titleDiv h{
+	    	color : #FFF;
+	    	margin-left: 15px;
+	    }
+
+ 
+	</style>
+
+	<apex:outputPanel rendered="{!renderPage}">
+	<div ng-app="myApp" class="container mainDiv" ng-controller="myctrl">
+        <div  class="row titleDiv">
+        	<h>Update your hobbies</h>
+        </div>
+        
+        <div class="row">
+           <div class="col-md-3">
+           		<label>First Name:</label>
+           </div>
+           
+           <div class="col-md-3">
+           		<label>{{contact.FirstName}}</label>
+           </div>
+           
+           <div class="col-md-3">
+           		<label>Last Name:</label>
+           </div>
+           
+           <div class="col-md-3">
+           		<label>{{contact.LastName}}</label>
+           </div>
+        </div>
+
+        <div class="row">
+        	<div class="col-md-1">
+        		<label>Hobbies:</label>
+        	</div>
+           <div class="col-md-11">
+           		<textarea class="hobbies" rows="5" ng-model="contact.My_Hobbies__c"> </textarea> 
+           </div>
+        </div>
+
+
+        <div class="row">
+        	<div class="divBtn">
+        		<input type="button" ng-click="save()" ng-disabled="myForm.$pristine || myForm.$dirty && myForm.$invalid" value="Save"/>
+        	</div>
+        </div>
+   	</div>
+   	</apex:outputPanel>
+
+   	<apex:form >
+		<apex:actionFunction name="saveMethod" action="{!Save2}" oncomplete="location.reload();">
+	    	<apex:param assignTo="{!contactJson}" name="contactJson" value="x"/>
+	    </apex:actionFunction>
+    </apex:form>
+
+ 
+	
+</apex:page>
